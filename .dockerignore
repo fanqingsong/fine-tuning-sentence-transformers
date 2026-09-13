@@ -1,0 +1,7 @@
+venv/
+.venv/
+tuned_models/
+__pycache__/
+*.py[cod]
+.git/
+.gitignore

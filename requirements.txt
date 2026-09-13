@@ -1,1 +1,7 @@
+--index-url https://repo.huaweicloud.com/repository/pypi/simple
+
+numpy==1.26.4
+scipy==1.13.1
 sentence-transformers==2.2.2
+transformers==4.41.2
+huggingface-hub==0.23.5

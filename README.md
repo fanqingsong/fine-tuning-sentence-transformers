@@ -5,6 +5,43 @@ This repository provides a practical demonstration of how to fine-tune a Sentenc
 
 This project is a simple example of how to fine-tune a Sentence Transformer model. It is not designed for large-scale or real-world applications.
 
+## Docker Compose
+
+Build the image:
+
+```bash
+docker compose build
+```
+
+Fine-tune the model in a one-off container:
+
+```bash
+docker compose run --rm train
+```
+
+Run inference with the fine-tuned model:
+
+```bash
+docker compose run --rm inference
+```
+
+Open an interactive shell in the container:
+
+```bash
+docker compose run --rm shell
+```
+
+Run an arbitrary CLI command in the container:
+
+```bash
+docker compose run --rm shell python --version
+docker compose run --rm shell python 02_using_your_model.py
+```
+
+The `tuned_models` directory is bind-mounted so trained models remain on the
+host. Downloaded Hugging Face models are retained in the
+`huggingface-cache` Docker volume.
+
 ## Setup and Installation
 To set up and run the example, follow these steps:
 

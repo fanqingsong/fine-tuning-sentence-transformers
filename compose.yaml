@@ -1,0 +1,28 @@
+x-app: &app
+  build:
+    context: .
+  image: fine-tuning-sentence-transformers:local
+  working_dir: /app
+  environment:
+    HF_HOME: /cache/huggingface
+  volumes:
+    - ./tuned_models:/app/tuned_models
+    - huggingface-cache:/cache/huggingface
+
+services:
+  train:
+    <<: *app
+    command: ["python", "01_tuning_your_model.py"]
+
+  inference:
+    <<: *app
+    command: ["python", "02_using_your_model.py"]
+
+  shell:
+    <<: *app
+    command: ["/bin/bash"]
+    stdin_open: true
+    tty: true
+
+volumes:
+  huggingface-cache:
