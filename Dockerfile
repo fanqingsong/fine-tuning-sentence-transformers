@@ -14,6 +14,6 @@ RUN pip install --no-deps \
     --index-url https://download.pytorch.org/whl/cpu
 RUN pip install -r requirements.txt
 
-COPY 01_tuning_your_model.py 02_using_your_model.py ./
+COPY *.py ./
 
 CMD ["python", "02_using_your_model.py"]

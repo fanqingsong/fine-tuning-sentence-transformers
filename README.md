@@ -41,9 +41,15 @@ docker compose run --rm shell python 03_compare_input_output.py --rank \
     --output "Unable to access my account."
 ```
 
-The `tuned_models` directory is bind-mounted so trained models remain on the
-host. Downloaded Hugging Face models are retained in the
-`huggingface-cache` Docker volume.
+The project directory is bind-mounted at `/app`, so host scripts (including
+`03_compare_input_output.py`) and `tuned_models` are used without rebuilding.
+Rebuild the image after `Dockerfile` or `requirements.txt` changes:
+
+```bash
+docker compose build
+```
+
+Downloaded Hugging Face models are retained in the `huggingface-cache` Docker volume.
 
 If the container cannot reach `huggingface.co` (common in mainland China),
 the Compose file and Dockerfile set `HF_ENDPOINT=https://hf-mirror.com`.

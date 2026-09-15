@@ -7,7 +7,7 @@ x-app: &app
     HF_HOME: /cache/huggingface
     HF_ENDPOINT: https://hf-mirror.com
   volumes:
-    - ./tuned_models:/app/tuned_models
+    - .:/app
     - huggingface-cache:/cache/huggingface
 
 services:
