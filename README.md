@@ -42,6 +42,10 @@ The `tuned_models` directory is bind-mounted so trained models remain on the
 host. Downloaded Hugging Face models are retained in the
 `huggingface-cache` Docker volume.
 
+If the container cannot reach `huggingface.co` (common in mainland China),
+the Compose file and Dockerfile set `HF_ENDPOINT=https://hf-mirror.com`.
+Override that variable if you use another mirror or a VPN.
+
 ## Setup and Installation
 To set up and run the example, follow these steps:
 

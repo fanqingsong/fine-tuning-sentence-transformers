@@ -5,6 +5,7 @@ x-app: &app
   working_dir: /app
   environment:
     HF_HOME: /cache/huggingface
+    HF_ENDPOINT: https://hf-mirror.com
   volumes:
     - ./tuned_models:/app/tuned_models
     - huggingface-cache:/cache/huggingface
