@@ -13,13 +13,45 @@ You do not need to set `device=` yourself. To force a specific GPU on the host, 
 
 ### Docker
 
-The image installs PyTorch `2.3.1+cu121`. Compose passes NVIDIA GPUs into every service with `gpus: all`.
+The image installs PyTorch `2.3.1+cu121`. Default Compose (`compose.yaml`) does **not** request a GPU, so `docker compose run` works even when the NVIDIA Container Toolkit is missing. Training then uses CPU.
 
-Host requirements:
+To attach GPUs, merge the overlay:
 
-- NVIDIA driver (CUDA 12.1 wheels typically need driver ≥ 525)
-- [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html)
+```bash
+docker compose -f compose.yaml -f compose.gpu.yaml run --rm train
+docker compose -f compose.yaml -f compose.gpu.yaml run --rm shell python -c "import torch; print(torch.cuda.is_available(), torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'cpu')"
+```
+
+Host requirements for the overlay:
+
+- NVIDIA driver (`nvidia-smi` works). CUDA 12.1 wheels typically need driver ≥ 525
+- [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)
 - WSL2 GPU support if Docker runs on Windows
+
+`nvidia-smi` on the host is not enough. Docker needs the toolkit, or you get:
+
+```text
+could not select device driver "" with capabilities: [[gpu]]
+```
+
+Install the toolkit on Debian/Ubuntu, then restart Docker:
+
+```bash
+curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
+curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | \
+  sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
+  sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+sudo apt-get update
+sudo apt-get install -y nvidia-container-toolkit
+sudo nvidia-ctk runtime configure --runtime=docker
+sudo systemctl restart docker
+```
+
+Sanity check (outside this project):
+
+```bash
+docker run --rm --gpus all nvidia/cuda:12.4.0-base-ubuntu22.04 nvidia-smi
+```
 
 Rebuild after changing the Dockerfile (CPU vs CUDA wheels):
 
@@ -27,13 +59,7 @@ Rebuild after changing the Dockerfile (CPU vs CUDA wheels):
 docker compose build
 ```
 
-Confirm the container sees a GPU:
-
-```bash
-docker compose run --rm shell python -c "import torch; print(torch.cuda.is_available(), torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'cpu')"
-```
-
-If CUDA is not visible, training still runs on CPU.
+If the overlay is not used, or CUDA is not visible inside the container, the scripts print `Using CPU` and continue.
 
 ### Local (venv)
 

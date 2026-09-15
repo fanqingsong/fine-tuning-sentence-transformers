@@ -1,0 +1,21 @@
+# Overlay: pass NVIDIA GPUs into Compose services.
+# Requires NVIDIA Container Toolkit. Without it, Docker fails with:
+#   could not select device driver "" with capabilities: [[gpu]]
+#
+#   docker compose -f compose.yaml -f compose.gpu.yaml run --rm train
+services:
+  train:
+    gpus: all
+    environment:
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: compute,utility
+  inference:
+    gpus: all
+    environment:
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: compute,utility
+  shell:
+    gpus: all
+    environment:
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: compute,utility
