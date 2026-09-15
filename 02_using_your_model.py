@@ -1,7 +1,10 @@
 from sentence_transformers import SentenceTransformer, util
 
-original_model = SentenceTransformer("all-mpnet-base-v2")
-fine_tuned_model = SentenceTransformer("tuned_models/fine_tuned_model")
+from device import resolve_device
+
+device = resolve_device()
+original_model = SentenceTransformer("all-mpnet-base-v2", device=device)
+fine_tuned_model = SentenceTransformer("tuned_models/fine_tuned_model", device=device)
 
 # Same-sentence cosine between the two models is a weak signal.
 # Fine-tuning often keeps a sentence close to its original vector while

@@ -2,8 +2,10 @@ from torch.utils.data import DataLoader
 from sentence_transformers import SentenceTransformer, InputExample, losses
 from sentence_transformers.evaluation import TripletEvaluator
 
+from device import resolve_device
 
-model = SentenceTransformer("all-mpnet-base-v2")
+device = resolve_device()
+model = SentenceTransformer("all-mpnet-base-v2", device=device)
 
 # Triplets: [anchor, positive (same intent), negative (different intent)]
 train_examples = [

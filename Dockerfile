@@ -10,8 +10,8 @@ WORKDIR /app
 
 COPY requirements.txt .
 RUN pip install --no-deps \
-    torch==2.3.1+cpu torchvision==0.18.1+cpu \
-    --index-url https://download.pytorch.org/whl/cpu
+    torch==2.3.1+cu121 torchvision==0.18.1+cu121 \
+    --index-url https://download.pytorch.org/whl/cu121
 RUN pip install -r requirements.txt
 
 COPY *.py ./

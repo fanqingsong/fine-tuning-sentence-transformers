@@ -23,6 +23,8 @@ import argparse
 
 from sentence_transformers import SentenceTransformer, util
 
+from device import resolve_device
+
 ORIGINAL_MODEL_NAME = "all-mpnet-base-v2"
 FINE_TUNED_MODEL_PATH = "tuned_models/fine_tuned_model"
 
@@ -204,10 +206,11 @@ def main():
     if args.input and not args.output and not args.rank:
         raise SystemExit("Provide --output for each --input, or pass --rank.")
 
+    device = resolve_device()
     print(f"Loading original model: {args.original_model}")
-    original_model = SentenceTransformer(args.original_model)
+    original_model = SentenceTransformer(args.original_model, device=device)
     print(f"Loading fine-tuned model: {args.fine_tuned_model}")
-    fine_tuned_model = SentenceTransformer(args.fine_tuned_model)
+    fine_tuned_model = SentenceTransformer(args.fine_tuned_model, device=device)
 
     if args.input and args.output:
         pairs = list(zip(args.input, args.output))
