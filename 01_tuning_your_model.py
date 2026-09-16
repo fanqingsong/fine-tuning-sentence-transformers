@@ -51,6 +51,7 @@ print(f"Steps per epoch: {steps_per_epoch}")
 print(f"Epochs: {epochs}")
 print(f"Warmup steps: {warmup_steps}")
 
+output_path = "tuned_models/fine_tuned_model"
 model.fit(
     train_objectives=[(train_dataloader, train_loss)],
     epochs=epochs,
@@ -58,7 +59,10 @@ model.fit(
     evaluator=evaluator,
     evaluation_steps=steps_per_epoch,
     optimizer_params={"lr": 2e-5},
+    output_path=output_path,
+    save_best_model=True,
+    show_progress_bar=True,
 )
 
-model.save("tuned_models/fine_tuned_model")
-print("Saved fine-tuned model to tuned_models/fine_tuned_model")
+print(f"Saved fine-tuned model to {output_path}")
+print(f"Evaluator CSV: {output_path}/eval/my_evaluator_results.csv")
